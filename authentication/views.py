@@ -1,60 +1,54 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate,login
-from django.http import JsonResponse
+from django.contrib.auth import authenticate, login
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_simplejwt.tokens import RefreshToken
 import json
 
-
-# Create your views here.
-
-# @desc view for Login a user
-# @api api/auth/login
-# @method POST
+# ---- LOGIN ----
 @api_view(['POST'])
 @csrf_exempt
 def login_view(request):
-    if request.method=="POST":
-        data=json.loads(request.body)
-        user=data.get('user')
-        password=data.get('password')
+    data = json.loads(request.body)
+    username = data.get('user')
+    password = data.get('password')
+    if not User.objects.filter(username=username).exists():
+        return Response({"status":"error","message":"Invalid Username"}, status=400)   
+    user = authenticate(request, username=username, password=password)
+    if user is None:
+        return Response({"status":"error","message":"Invalid Password"}, status=400)
+    # Generate JWT tokens
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
+    refresh_token = str(refresh)   
+    # login(request, user)
+    return Response({"status":"ok","message":"Logged in successfully","access":access_token,"refresh":refresh_token}, status=200)
 
-        if not User.objects.filter(username=user).exists():
-            return Response({"staus":"error","message":"Invalid Username"},status=400)
-        user=authenticate(request,username=user,password=password)
-        
-        if user is None:
-            return  Response({"staus":"error","message":"Invalid Password"},status=400)
-        else:
-            login(request,user)
-            return  Response({"staus":"ok","message":"Username Created"},status=200)
-    return  Response({"message": "Invalid Request"})
-
-
-# @desc view for register a user
-# @api api/auth/login
-# @method POST
+# ---- REGISTER ----
 @api_view(['POST'])
-@csrf_exempt
 def register(request):
-    if request.method=='POST':
-        data=json.loads(request.body)
-        first_name=data.get("first_name")
-        last_name=data.get("last_name")
-        username=data.get("username")
-        password=data.get("password")
+    data = json.loads(request.body)
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    username = data.get("username")
+    password = data.get("password")
+    if User.objects.filter(username=username).exists():
+        return Response({"status":"error","message":"Username already exists"}, status=400)
+    # Create user
+    user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username)
+    user.set_password(password)
+    user.save()
+    # Generate JWT tokens
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
+    refresh_token = str(refresh)
+    return Response({"status": "ok","message": "User created successfully","access": access_token,"refresh": refresh_token}, status=201)
 
-        # check user is already exist in this name
-        user=User.objects.filter(username=username)
-        if user.exists():
-             # Display an information message if the username is taken
-             return JsonResponse({"status":"error","message":"Username already existed"})
-        # Create a new user object with the provided information
-        user=User.objects.create_user(first_name=first_name,last_name=last_name,username=username,)
-
-        user.set_password(password)
-        user.save()
-        return JsonResponse({"status":"true","message":"New Username Saved"})   
-    return JsonResponse({"message":"Invalid Request"})   
-
+# ---- LIST VIEW ----
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+@csrf_exempt
+def list_view(request):
+    return Response({"message": "Ye wali api sirf authenticated user hee dekh ske"})
