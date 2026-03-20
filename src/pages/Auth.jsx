@@ -15,7 +15,7 @@ const Auth = ({children}) => {
       </div>
 
       {/* Right Side - Image */}
-      <div className="w-1/2 bg-blue-600  justify-center items-center text-white hidden sm:flex ">
+      <div className="w-1/2 bg-primary justify-center items-center text-white hidden sm:flex ">
         <h1 className="text-4xl font-bold">
           Hire Me!
         </h1>

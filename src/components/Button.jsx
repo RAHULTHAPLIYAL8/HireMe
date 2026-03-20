@@ -5,7 +5,7 @@ const Button = (props) => {
     <button
               style={{ width: props.width }}
               type="submit"
-              className={`w-${props.width} bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition`}
+              className={`w-${props.width} bg-primary text-white py-3 rounded-lg hover:bg-blue-700 transition`}
     >
              {props.name }
     </button>
