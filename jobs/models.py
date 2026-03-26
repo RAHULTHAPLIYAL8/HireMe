@@ -6,12 +6,21 @@ User = get_user_model()
 # Create your models here.
 
 class Jobs(models.Model):
-      posted_by=models.OneToOneField(User,on_delete=models.CASCADE)
+      posted_by = models.ForeignKey(User, on_delete=models.CASCADE)
       title=models.CharField(max_length=100,null=False)
       company_name=models.CharField(max_length=100,null=False)
       company_website=models.CharField(max_length=100,null=False)
       location=models.CharField(max_length=100,null=False)
-      job_type_choices=(("full_time","full_time"),('part_time', 'part_time'), ('internship', 'internship'), ('contract', 'contract'),('remote','remote'))
+      job_type_choices = models.CharField(
+      max_length=20,choices=(
+        ("full_time", "full_time"),
+        ("part_time", "part_time"),
+        ("internship", "internship"),
+        ("contract", "contract"),
+        ("remote", "remote")
+    ),
+    default="remote"
+)
       salary_min=models.IntegerField()
       salary_max=models.IntegerField()
       currency = models.CharField(max_length=10,choices=(("INR", "INR"), ("USD", "$")),default="INR")
