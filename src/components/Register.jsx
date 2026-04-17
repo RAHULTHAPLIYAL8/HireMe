@@ -1,7 +1,36 @@
 import Input from "./Input";
 import Button from "./Button";
+import { useState } from "react";
+import axiosInstance from "../api/axios";
 
 const Register = () => {
+
+  const [state,setState]=useState({email:"",password:"",username:""});
+
+  const Registerapi=()=>
+  {
+  axiosInstance.post("/register", {
+  email: state.email,
+  password: state.password,
+  username: state.username
+}).then((data)=>{
+  console.log(data)
+}).catch((err)=>
+{
+  console.log(err)
+})
+  }
+
+  const changeState=(e)=>{
+    const {name,value}=e.target;
+    setState((pre)=>(
+      {
+        ...pre,
+        [name]:value
+      }
+    ))
+
+  }
 
   return (
     <div className="w-5/6 h-5/6 p-8 bg-white shadow-lg rounded-xl flex justify-center items-center flex-col">
@@ -17,7 +46,7 @@ const Register = () => {
           >
             Enter your username
           </label>
-          <Input id="username" type="text" placeholder="abcd" />
+          <Input id="username" name="username" onChange={changeState} value={state.username} type="text" placeholder="abcd" />
         </div>
 
         <div>
@@ -27,7 +56,7 @@ const Register = () => {
           >
             Enter your email
           </label>
-          <Input id="email" type="email" placeholder="exampl123@gmail.com" />
+          <Input id="email" name="email" onChange={changeState} value={state.email} type="email" placeholder="exampl123@gmail.com" />
         </div>
 
          <div>
@@ -37,7 +66,7 @@ const Register = () => {
           >
             Enter your email
           </label>
-          <Input id="password" type="passwrod" placeholder="exampl123" />
+          <Input id="password" name="password" onChange={changeState} value={state.password} type="passwrod" placeholder="exampl123" />
         </div>
 
         <Button name={"Submit"} width={"100%"} />
