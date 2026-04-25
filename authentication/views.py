@@ -16,7 +16,7 @@ User=get_user_model()
 @csrf_exempt
 def login_view(request):
     data = json.loads(request.body)
-    username = data.get('user')
+    username = data.get('email')
     password = data.get('password')
     if not User.objects.filter(username=username).exists():
         return Response({"status":"error","message":"Invalid Username"}, status=400)   
@@ -38,11 +38,12 @@ def register(request):
     last_name = data.get("last_name")
     username = data.get("username")
     password = data.get("password")
+    email = data.get("email")
     type=data.get("userType")
     if User.objects.filter(username=username).exists():
         return Response({"status":"error","message":"Username already exists"}, status=400)
     # Create user
-    user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username,user_type=type)
+    user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username,user_type=type,email=email)
     user.set_password(password)
     user.save()
     # Generate JWT tokens

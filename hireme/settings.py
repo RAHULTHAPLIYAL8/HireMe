@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'authentication',
+    "corsheaders",
     'jobs',
     'rest_framework',
     'daphne',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL='authentication.User'
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +58,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# //cors error
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = ['content-type','authorization',]
 
 ROOT_URLCONF = 'hireme.urls'
 
