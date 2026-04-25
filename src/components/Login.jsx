@@ -7,8 +7,9 @@ const Login = () => {
 
   let [state, setState] = useState({ email: "", password: "" });
 
-  let loginSet=()=>{
-    axiosInstance("/login",{
+  let loginSet=(e)=>{
+    e.preventDefault();
+    axiosInstance.post("/userlogin/",{
       email:state.email,
       password:state.password
     }).then((data)=>
@@ -38,23 +39,23 @@ const Login = () => {
             Login
           </h2>
 
-          <form className="space-y-5">
+          <form    onSubmit={loginSet} className="space-y-5">
 
             <div>
               <label htmlFor="username" className="text-md font-medium  text-gray-600">
                 Enter your email
               </label>
-              <Input id="username" type="text" name="email" onChange={valueChange} value={state.email} placeholder="example123@gmail.com"/>
+              <input id="username" type="text" name="email" onChange={valueChange} value={state.email} placeholder="example123@gmail.com"/>
             </div>
 
             <div>
               <label htmlFor="password" className="text-md font-medium  text-gray-600">
                 Enter your password
               </label>
-              <Input id="password" type="password" name="password" onChange={valueChange} value={state.password} placeholder="Enter password"/>
+              <input id="password" type="password" name="password" onChange={valueChange} value={state.password} placeholder="Enter password"/>
             </div>
 
-           <Button  onSubmit={loginSet} name={"Submit"} width={"100%"} />
+           <Button   name={"Submit"} width={"100%"} />
 
           </form>
 

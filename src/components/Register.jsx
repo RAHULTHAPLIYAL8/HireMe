@@ -5,14 +5,20 @@ import axiosInstance from "../api/axios";
 
 const Register = () => {
 
-  const [state,setState]=useState({email:"",password:"",username:""});
+ 
+ 
+  const [state,setState]=useState({email:"",password:"",username:"",first_name:"",last_name:""});
 
-  const Registerapi=()=>
+  const Registerapi=(e)=>
   {
-  axiosInstance.post("/register", {
+   e.preventDefault();
+  axiosInstance.post("/register/", {
   email: state.email,
   password: state.password,
-  username: state.username
+  username: state.username,
+  first_name:state.first_name,
+  last_name:state.last_name,
+  userType:"normal"
 }).then((data)=>{
   console.log(data)
 }).catch((err)=>
@@ -38,7 +44,7 @@ const Register = () => {
         Register
       </h2>
 
-      <form className="space-y-5">
+      <form  className="space-y-5" onSubmit={Registerapi}>
         <div>
           <label
             htmlFor="username"
@@ -46,7 +52,7 @@ const Register = () => {
           >
             Enter your username
           </label>
-          <Input id="username" name="username" onChange={changeState} value={state.username} type="text" placeholder="abcd" />
+          <input id="username" name="username" onChange={changeState} value={state.username} type="text" placeholder="abcd" />
         </div>
 
         <div>
@@ -56,7 +62,7 @@ const Register = () => {
           >
             Enter your email
           </label>
-          <Input id="email" name="email" onChange={changeState} value={state.email} type="email" placeholder="exampl123@gmail.com" />
+          <input id="email" name="email" onChange={changeState} value={state.email} type="email" placeholder="exampl123@gmail.com" />
         </div>
 
          <div>
@@ -66,11 +72,11 @@ const Register = () => {
           >
             Enter your email
           </label>
-          <Input id="password" name="password" onChange={changeState} value={state.password} type="passwrod" placeholder="exampl123" />
+          <input id="password" name="password" onChange={changeState} value={state.password} type="password" placeholder="exampl123" />
         </div>
 
-        <Button name={"Submit"} width={"100%"} />
-      </form>
+        <Button  width={"100%"} />
+       </form>
     </div>
   );
 };
