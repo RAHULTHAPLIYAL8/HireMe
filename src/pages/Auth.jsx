@@ -1,6 +1,7 @@
 // import { useNavigate } from "react-router";
 import Login from "../components/Login";
 import Register from "../components/Register";
+import {Toaster} from "react-hot-toast";
 
 const Auth = ({children}) => {
 
@@ -8,7 +9,7 @@ const Auth = ({children}) => {
 
   return (
     <div className="min-h-screen w-full flex">
-      
+      <Toaster/>
       {/* Left Side - Form */}
       <div className="w-full sm:w-1/2 flex justify-center items-center bg-gray-50">
           {children}

@@ -1,5 +1,6 @@
 import Input from "./Input"
 import Button from "./Button";
+import toast from "react-hot-toast";
 import axiosInstance from "../api/axios";
 import { useState } from "react";
 
@@ -14,11 +15,14 @@ const Login = () => {
       password:state.password
     }).then((data)=>
     {
-      console.log(data);
+      if(data.status===200)
+        toast.success(data.data.message)
+      else
+        toast.error(data.data.message)
     }
     ).catch((err)=>
     {
-      console.log(err)
+       toast.error(err.response.data.message)
     })
   }
 
@@ -41,18 +45,18 @@ const Login = () => {
 
           <form    onSubmit={loginSet} className="space-y-5">
 
-            <div>
-              <label htmlFor="username" className="text-md font-medium  text-gray-600">
+            <div className="w-100">
+              <label htmlFor="username" className="text-md block font-medium  text-gray-600 mb-2">
                 Enter your email
               </label>
-              <input id="username" type="text" name="email" onChange={valueChange} value={state.email} placeholder="example123@gmail.com"/>
+              <input id="username" className="w-full p-2" type="text" name="email" onChange={valueChange} value={state.email} placeholder="example123@gmail.com"/>
             </div>
 
             <div>
-              <label htmlFor="password" className="text-md font-medium  text-gray-600">
+              <label htmlFor="password" className="text-md font-medium  text-gray-600 mb-2">
                 Enter your password
               </label>
-              <input id="password" type="password" name="password" onChange={valueChange} value={state.password} placeholder="Enter password"/>
+              <input id="password" className="w-full p-2" type="password" name="password" onChange={valueChange} value={state.password} placeholder="Enter password"/>
             </div>
 
            <Button   name={"Submit"} width={"100%"} />
